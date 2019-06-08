@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% block title %}
+Book
+{% endblock %}
+{% block body %}
+<div class="dashboard">
+<a href="/">Home</a>
+</div>
+<div class='book'>
+<h1>Title: {{ books.title }} </h1>
+<h2>Author: {{ books.author }} </h2>
+<h2>Year of publication: {{ books.year }} </h2>
+<h3>ISBN: {{ books.isbn }} </h3>
+
+{% if data %}
+
+<h4>Avg. Rating: {{ data['books'][0]['average_rating'] }}</h4>
+<h4>No of Rating: {{ data['books'][0]['work_ratings_count'] }}</h4>
+<span class='dashboard'>- Courtsey GoodReads.Com </span>
+{% endif %}
+</div>
+<div class='book'>
+{% if review %}
+<h4>You rated: {{ review.rating }} out of 5.</h4>
+<h4>You reviewed: </h4>
+<textarea readonly>{{ review.review }} </textarea>
+{% elif user %}
+<form action="{{ url_for('search_by_isbn',isbn=books.isbn) }}" method="post">
+<div>
+<h1>Review it</h1>
+</div>
+<div class="form-group rating" >
+<lebel>Rating</lebel>
+<input type="number" min=1 max=5 class="form-control col-2" name="rating" required>
+</div>
+<div class="form-group">
+<textarea type="text" name="review" placeholder="Write your comment" class="form-control col-7" rows="3" required ></textarea>
+</div>
+<div class="form-group">
+<button type="submit" class="btn btn-primary">Submit</button>
+</div></form>
+{% endif %}
+</div>
+{% if success %}
+{{ success }}
+{% endif %}
+{% if message %}
+<div class='errormessage'>
+{{ message }}
+
+<a href="{{ url_for('login') }}" >Login here</a></div>
+{% endif %}
+{% endblock %}

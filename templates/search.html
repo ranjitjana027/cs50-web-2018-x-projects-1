@@ -1,0 +1,70 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Search
+{% endblock %}
+
+{%block body %}
+
+{% if user %}
+
+
+<div class="dashboard">
+<h3>Hi {{ user.username}} ! </h3>
+<a href="{{ url_for('logout') }}">Logout </a>
+</div>
+{% else %}
+
+<div class='dashboard' >
+<h3>Hi Guest!</h3>
+<a href="{{ url_for('login') }}">Login</a> |  
+<a href="{{ url_for('register') }}">Sign Up</a>
+</div>
+
+{% endif %}
+
+
+<form action="{{ url_for('search') }}" method="post" >
+<div>
+<header>
+<h1>Search</h1>
+</header>
+</div>
+<div class="form-group form-row">
+<div class="col-7" >
+<input type="search" name="query" class="form-control" placeholder="Enter keywords..." value="{{q}}" required>
+</div>
+<div class="col">
+ 
+<select class="form-control" name="search_field" selected='selected'>
+
+<option value="isbn" {% if 'isbn'==sfield %} selected {% endif %}>Search by ISBN</option>
+<option value="title" {% if 'title'==sfield %} selected {% endif %}>Search by Title</option>
+<option value="author" {% if 'author'==sfield %} selected {% endif %}>Search by Author</option>
+</select>
+
+</div>
+<div class="col-2">
+<button type="submit" class="btn btn-primary" >Search</button>
+</div>
+</div>
+
+
+</form>
+
+{% if matches  %}
+<h2>Search Results (<small> {{ rownum }} results</small> )</h2>
+
+{% endif %}
+{% if message  %}
+<h2>No result found</h2>
+
+{% endif %}
+
+<ul>
+{% for match in matches %}
+<li><a href="{{ url_for('search_by_isbn',isbn=match.isbn) }}" >{{ match.title }}</a></li>
+{% endfor %}
+</ul>
+</section>
+{% endblock %}
